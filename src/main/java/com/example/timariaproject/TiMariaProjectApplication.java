@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TiMariaProjectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TiMariaProjectApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TiMariaProjectApplication.class, args);
+    }
 
 }
