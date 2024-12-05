@@ -14,15 +14,15 @@ public class UtilizadorService {
 
     private final UtilizadorRepository utilizadorRepository;
 
-
     public Iterable<Utilizador> getAll(){
         return utilizadorRepository.findAll();
     }
 
-    public String addNewUtilizador(String nome, String email){
+    public String addNewUtilizador(String nome, String email, String tipoutilizador){
         Utilizador user = new Utilizador();
         user.setNome(nome);
         user.setEmail(email);
+        user.setTipoutilizador(tipoutilizador);
         utilizadorRepository.save(user);
         return "Saved";
     }

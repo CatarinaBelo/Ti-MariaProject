@@ -6,10 +6,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Entity
-@Table
+@Table(name = "utilizador")
 @Getter
 @Setter
 public class Utilizador {
@@ -21,5 +22,10 @@ public class Utilizador {
     private BigInteger telefone;
     private String fotoperfil;
     private Integer localizacao;
-
+    private Boolean notificacao;
+    private BigInteger nif;
+    private String descricao;
+    private String moradafiscal;
+    private String codigopostal;
+    private String tipoutilizador;
 }
