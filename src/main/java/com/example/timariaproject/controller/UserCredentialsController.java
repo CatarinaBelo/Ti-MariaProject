@@ -1,9 +1,7 @@
 package com.example.timariaproject.controller;
 
 import com.example.timariaproject.domain.UserCredentials;
-import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.service.UserCredentialsService;
-import com.example.timariaproject.service.UtilizadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

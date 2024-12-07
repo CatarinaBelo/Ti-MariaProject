@@ -1,9 +1,7 @@
 package com.example.timariaproject.service;
 
 import com.example.timariaproject.domain.UserCredentials;
-import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.repository.UserCredentialsRepository;
-import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

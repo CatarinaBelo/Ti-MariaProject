@@ -1,12 +1,8 @@
 package com.example.timariaproject.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Entity
@@ -14,18 +10,17 @@ import java.math.BigInteger;
 @Getter
 @Setter
 public class Utilizador {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String nome;
     private String email;
+    private String tipoutilizador;
     private BigInteger telefone;
+    private BigInteger nif;
+    private String moradafiscal;
     private String fotoperfil;
     private Integer localizacao;
     private Boolean notificacao;
-    private BigInteger nif;
     private String descricao;
-    private String moradafiscal;
-    private String codigopostal;
-    private String tipoutilizador;
 }
