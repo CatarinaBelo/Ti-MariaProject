@@ -1,6 +1,7 @@
 package com.example.timariaproject.controller;
 
 import com.example.timariaproject.DTOs.RegistoDTO;
+import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.service.UtilizadorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class UtilizadorController {
     public ResponseEntity<String> showRegistrationForm(@RequestBody RegistoDTO registoDTO) {
         utilizadorService.addNewUtilizador(registoDTO);
         return ResponseEntity.ok().body("Register Succeeded");
+    }
+
+    @GetMapping(path = "/details")
+    public ResponseEntity<UserDTO> getUserDetails() {
+
+        return ResponseEntity.ok(utilizadorService.getUserDetailsByEmail());
     }
 }
 

@@ -1,9 +1,12 @@
 package com.example.timariaproject.service;
 
 import com.example.timariaproject.DTOs.RegistoDTO;
+import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -20,7 +23,7 @@ public class UtilizadorService {
 
     public String addNewUtilizador(RegistoDTO registoDTO) {
         Utilizador user = new Utilizador();
-        if(utilizadorRepository.findByEmail(registoDTO.getEmail()).isPresent()) {
+        if (utilizadorRepository.findByEmail(registoDTO.getEmail()).isPresent()) {
             throw new IllegalArgumentException();
         }
         user.setNome(registoDTO.getNome());
@@ -35,5 +38,16 @@ public class UtilizadorService {
         }
         utilizadorRepository.save(user);
         return "Saved";
+    }
+
+    public UserDTO getUserDetailsByEmail() {
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return utilizadorRepository.findByEmail(user.getUsername())
+                .map(utilizador ->
+                        new UserDTO(utilizador.getNome(), utilizador.getEmail(),
+                                utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
+                                utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
+                .orElseThrow();
     }
 }
