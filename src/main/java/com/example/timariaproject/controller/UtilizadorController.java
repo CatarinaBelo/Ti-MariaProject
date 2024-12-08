@@ -2,6 +2,7 @@ package com.example.timariaproject.controller;
 
 import com.example.timariaproject.DTOs.RegistoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
+import com.example.timariaproject.DTOs.UserEditDTO;
 import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.service.UtilizadorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,14 @@ public class UtilizadorController {
 
     @GetMapping(path = "/details")
     public ResponseEntity<UserDTO> getUserDetails() {
-
         return ResponseEntity.ok(utilizadorService.getUserDetailsByEmail());
     }
+
+    @PostMapping(path = "/edit")
+    public ResponseEntity<String> editUserDetails(@RequestBody UserEditDTO userEditDTO) {
+        utilizadorService.updateUserDetails(userEditDTO);
+        return ResponseEntity.ok().body("Edit Succeeded");
+    }
+
 }
 

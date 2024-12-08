@@ -2,6 +2,7 @@ package com.example.timariaproject.service;
 
 import com.example.timariaproject.DTOs.RegistoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
+import com.example.timariaproject.DTOs.UserEditDTO;
 import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class UtilizadorService {
     }
 
     public UserDTO getUserDetailsByEmail() {
+        // Vai buscar qual é o user que está autenticado
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return utilizadorRepository.findByEmail(user.getUsername())
@@ -50,4 +52,19 @@ public class UtilizadorService {
                                 utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
                 .orElseThrow();
     }
+
+    public String updateUserDetails(UserEditDTO userEditDTO){
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var utilizador = utilizadorRepository.findByEmail(user.getUsername()).orElseThrow();
+        utilizador.setNome(userEditDTO.getNome());
+        utilizador.setTelefone(userEditDTO.getTelefone());
+        utilizador.setFotoperfil(userEditDTO.getFotoperfil());
+        utilizador.setDescricao(userEditDTO.getDescricao());
+        utilizador.setMoradafiscal(userEditDTO.getMoradafiscal());
+
+        utilizadorRepository.save(utilizador);
+
+        return "Edit User details successful";
+    }
+
 }
