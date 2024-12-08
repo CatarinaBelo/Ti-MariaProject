@@ -18,6 +18,7 @@ public class UserCredentialsController {
         return userCredentialsService.addNewUtilizador(nome, email);
     }
 
+    // Login
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<UserCredentials> getAllUsers() {
         System.out.print(SecurityContextHolder.getContext().getAuthentication().getPrincipal());

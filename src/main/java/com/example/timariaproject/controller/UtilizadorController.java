@@ -41,5 +41,11 @@ public class UtilizadorController {
         return ResponseEntity.ok().body("Edit Succeeded");
     }
 
+    @GetMapping(path = "/showpic")
+    public ResponseEntity<String> showProfilePic() {
+        return ResponseEntity.ok(utilizadorService.showUserProfilePic());
+    }
+
+
 }
 

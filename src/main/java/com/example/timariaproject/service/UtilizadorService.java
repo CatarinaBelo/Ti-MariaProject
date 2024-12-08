@@ -67,4 +67,11 @@ public class UtilizadorService {
         return "Edit User details successful";
     }
 
+    public String showUserProfilePic(){
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var utilizador = utilizadorRepository.findByEmail(user.getUsername()).orElseThrow();
+
+        return utilizador.getFotoperfil();
+    }
+
 }
