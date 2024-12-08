@@ -22,7 +22,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         //Assim já não é necessário estar autenticado para fazer o registo
-                        .requestMatchers("/user/register", "/home").permitAll()
+                        .requestMatchers("/user/register", "/home", "/login").permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(customUserDetailsService)
