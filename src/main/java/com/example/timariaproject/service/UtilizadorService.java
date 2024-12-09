@@ -3,7 +3,9 @@ package com.example.timariaproject.service;
 import com.example.timariaproject.DTOs.RegistoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.DTOs.UserEditDTO;
+import com.example.timariaproject.domain.UserCredentials;
 import com.example.timariaproject.domain.Utilizador;
+import com.example.timariaproject.repository.UserCredentialsRepository;
 import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,7 @@ import java.math.BigInteger;
 public class UtilizadorService {
 
     private final UtilizadorRepository utilizadorRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
 
     public Iterable<Utilizador> getAll() {
         return utilizadorRepository.findAll();
@@ -38,6 +41,14 @@ public class UtilizadorService {
             user.setTelefone(registoDTO.getTelefone());
         }
         utilizadorRepository.save(user);
+
+        UserCredentials userCredentials = new UserCredentials();
+        userCredentials.setEmail(registoDTO.getEmail());
+        userCredentials.setPassword(registoDTO.getPassword());
+        userCredentials.setIdutilizador(user.getId());
+        userCredentialsRepository.save(userCredentials);
+
+
         return "Saved";
     }
 
@@ -53,7 +64,7 @@ public class UtilizadorService {
                 .orElseThrow();
     }
 
-    public String updateUserDetails(UserEditDTO userEditDTO){
+    public String updateUserDetails(UserEditDTO userEditDTO) {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var utilizador = utilizadorRepository.findByEmail(user.getUsername()).orElseThrow();
         utilizador.setNome(userEditDTO.getNome());
@@ -67,7 +78,7 @@ public class UtilizadorService {
         return "Edit User details successful";
     }
 
-    public String showUserProfilePic(){
+    public String showUserProfilePic() {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var utilizador = utilizadorRepository.findByEmail(user.getUsername()).orElseThrow();
 
