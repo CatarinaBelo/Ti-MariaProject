@@ -5,6 +5,7 @@ import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.DTOs.UserEditDTO;
 import com.example.timariaproject.domain.UserCredentials;
 import com.example.timariaproject.domain.Utilizador;
+import com.example.timariaproject.exception.EmailAlreadyExistsException;
 import com.example.timariaproject.repository.UserCredentialsRepository;
 import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class UtilizadorService {
     public String addNewUtilizador(RegistoDTO registoDTO) {
         Utilizador user = new Utilizador();
         if (utilizadorRepository.findByEmail(registoDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException();
+            throw new EmailAlreadyExistsException("O email já está registado.");
         }
         user.setNome(registoDTO.getNome());
         user.setEmail(registoDTO.getEmail());
