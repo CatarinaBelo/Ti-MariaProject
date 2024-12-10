@@ -35,7 +35,7 @@ public class UtilizadorService {
         user.setEmail(registoDTO.getEmail());
         user.setTipoutilizador(registoDTO.getTipoutilizador());
         user.setNif(registoDTO.getNif());
-        if ("agricultor".equals(registoDTO.getTipoutilizador())) {
+        if ("Produtor".equals(registoDTO.getTipoutilizador())) {
             user.setMoradafiscal(registoDTO.getMoradafiscal());
         }
         if (registoDTO.getTelefone() != null) {
