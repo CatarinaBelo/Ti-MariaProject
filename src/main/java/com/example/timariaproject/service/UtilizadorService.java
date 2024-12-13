@@ -21,6 +21,7 @@ public class UtilizadorService {
 
     private final UtilizadorRepository utilizadorRepository;
     private final UserCredentialsRepository userCredentialsRepository;
+    private final UserCredentialsService userCredentialsService;
 
     public Iterable<Utilizador> getAll() {
         return utilizadorRepository.findAll();
@@ -43,11 +44,7 @@ public class UtilizadorService {
         }
         utilizadorRepository.save(user);
 
-        UserCredentials userCredentials = new UserCredentials();
-        userCredentials.setEmail(registoDTO.getEmail());
-        userCredentials.setPassword(registoDTO.getPassword());
-        userCredentials.setIdutilizador(user.getId());
-        userCredentialsRepository.save(userCredentials);
+        userCredentialsService.addNewUtilizador(registoDTO.getEmail(), registoDTO.getPassword());
 
 
         return "Saved";

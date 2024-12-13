@@ -13,7 +13,6 @@ public class UserCredentials {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private Integer idutilizador;
     private String email;
     private String password;
 }
