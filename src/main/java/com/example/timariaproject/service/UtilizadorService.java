@@ -23,8 +23,16 @@ public class UtilizadorService {
     private final UserCredentialsRepository userCredentialsRepository;
     private final UserCredentialsService userCredentialsService;
 
-    public Iterable<Utilizador> getAll() {
-        return utilizadorRepository.findAll();
+    public UserDTO getUserDetailsByEmail() {
+        // Vai buscar qual é o user que está autenticado
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return utilizadorRepository.findByEmail(user.getUsername())
+                .map(utilizador ->
+                        new UserDTO(utilizador.getNome(), utilizador.getEmail(),
+                                utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
+                                utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
+                .orElseThrow();
     }
 
     public String addNewUtilizador(RegistoDTO registoDTO) {
@@ -50,16 +58,8 @@ public class UtilizadorService {
         return "Saved";
     }
 
-    public UserDTO getUserDetailsByEmail() {
-        // Vai buscar qual é o user que está autenticado
-        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return utilizadorRepository.findByEmail(user.getUsername())
-                .map(utilizador ->
-                        new UserDTO(utilizador.getNome(), utilizador.getEmail(),
-                                utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
-                                utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
-                .orElseThrow();
+    public Iterable<Utilizador> getAll() {
+        return utilizadorRepository.findAll();
     }
 
     public String updateUserDetails(UserEditDTO userEditDTO) {

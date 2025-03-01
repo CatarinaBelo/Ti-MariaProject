@@ -19,17 +19,6 @@ public class UtilizadorController {
     private UtilizadorService utilizadorService;
 
 
-    @GetMapping(path = "/all")
-    public @ResponseBody Iterable<Utilizador> getAllUsers() {
-        return utilizadorService.getAll();
-    }
-
-    @PostMapping(path = "/register")
-    public ResponseEntity<String> showRegistrationForm(@RequestBody RegistoDTO registoDTO) {
-        utilizadorService.addNewUtilizador(registoDTO);
-        return ResponseEntity.ok().body("Register Succeeded");
-    }
-
     @GetMapping(path = "/details")
     public ResponseEntity<UserDTO> getUserDetails() {
         return ResponseEntity.ok(utilizadorService.getUserDetailsByEmail());
@@ -39,6 +28,17 @@ public class UtilizadorController {
     public ResponseEntity<String> editUserDetails(@RequestBody UserEditDTO userEditDTO) {
         utilizadorService.updateUserDetails(userEditDTO);
         return ResponseEntity.ok().body("Edit Succeeded");
+    }
+
+    @PostMapping(path = "/register")
+    public ResponseEntity<String> showRegistrationForm(@RequestBody RegistoDTO registoDTO) {
+        utilizadorService.addNewUtilizador(registoDTO);
+        return ResponseEntity.ok().body("Register Succeeded");
+    }
+
+    @GetMapping(path = "/all")
+    public @ResponseBody Iterable<Utilizador> getAllUsers() {
+        return utilizadorService.getAll();
     }
 
     @GetMapping(path = "/showpic")
