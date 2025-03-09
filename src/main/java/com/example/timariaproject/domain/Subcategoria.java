@@ -1,5 +1,7 @@
 package com.example.timariaproject.domain;
 
+import com.example.timariaproject.DTOs.AnuncioDTO;
+import com.example.timariaproject.DTOs.SubcategoriaDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,5 +20,12 @@ public class Subcategoria {
     private Categoria categoria; // FK para Categoria
 
     private String nomesubcategoria;
+
+    public SubcategoriaDTO toDto() {
+        return SubcategoriaDTO.builder()
+                .categoria(this.categoria != null ? this.categoria.toDto() : null)
+                .nomesubcategoria(this.nomesubcategoria)
+                .build();
+    }
 
 }

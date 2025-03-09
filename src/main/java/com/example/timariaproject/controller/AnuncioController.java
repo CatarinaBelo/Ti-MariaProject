@@ -1,6 +1,8 @@
 package com.example.timariaproject.controller;
 
 import com.example.timariaproject.DTOs.AnuncioDTO;
+import com.example.timariaproject.DTOs.AnuncioSaveDTO;
+import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.service.AnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +25,15 @@ public class AnuncioController {
     }
 
     @PostMapping(path = "/add")
-    public ResponseEntity<String> criarAnuncio(@RequestBody AnuncioDTO anuncioDTO) {
+    public ResponseEntity<String> criarAnuncio(@RequestBody AnuncioSaveDTO anuncioDTO) {
+
         anuncioService.salvarAnuncio(anuncioDTO);
         return ResponseEntity.ok().body("Save Anuncio Succeeded");
+    }
+
+    @GetMapping("/categoria/{idCategoria}")
+    public ResponseEntity<List<Anuncio>> listarAnunciosPorCategoria(@PathVariable Integer idCategoria) {
+        List<Anuncio> anuncios = anuncioService.listarAnunciosPorCategoria(idCategoria);
+        return ResponseEntity.ok(anuncios);
     }
 }

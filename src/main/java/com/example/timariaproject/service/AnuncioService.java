@@ -1,13 +1,15 @@
 package com.example.timariaproject.service;
 
-import com.example.timariaproject.DTOs.AnuncioDTO;
+import com.example.timariaproject.DTOs.*;
 import com.example.timariaproject.domain.Anuncio;
-import com.example.timariaproject.domain.ImagemAnuncio;
+import com.example.timariaproject.domain.Categoria;
 import com.example.timariaproject.enums.EstadoEnum;
 import com.example.timariaproject.repository.AnuncioRepository;
+import com.example.timariaproject.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,48 +17,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AnuncioService {
     private final AnuncioRepository anuncioRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    // depois fazer só enviar as com estado ativo
+
     public List<AnuncioDTO> getAllAnuncios() {
-        return anuncioRepository.findAll()
+        return anuncioRepository.findAllByEstado(EstadoEnum.ATIVO)
                 .stream()
-                .map(anuncio -> new AnuncioDTO(anuncio.getTitulo(), anuncio.getDescricao(), anuncio.getPreco(),
-                        anuncio.getDatacriacao(), anuncio.getDataatualizacao(),
-                        anuncio.getTipo(), anuncio.getUtilizador(), anuncio.getCategoria(), anuncio.getSubcategoria(),
-                        anuncio.getTipoProduto(), anuncio.getStock(), anuncio.getUnidadesMedida(), anuncio.getLocalizacao(), anuncio.getImagens()))
+                .map(Anuncio::toDto)
                 .toList();
     }
 
-    public String salvarAnuncio(AnuncioDTO anuncioDTO) {
-        Anuncio anuncio = new Anuncio();
-        anuncio.setTitulo(anuncioDTO.getTitulo());
-        anuncio.setDescricao(anuncioDTO.getDescricao());
-        anuncio.setPreco(anuncioDTO.getPreco());
-        anuncio.setDatacriacao(anuncioDTO.getDatacriacao());
-        anuncio.setDataatualizacao(anuncioDTO.getDataatualizacao());
-        anuncio.setTipo(anuncioDTO.getTipo());
-        anuncio.setUtilizador(anuncioDTO.getUtilizador());
-        anuncio.setCategoria(anuncioDTO.getCategoria());
-        anuncio.setSubcategoria(anuncioDTO.getSubcategoria());
-        anuncio.setTipoProduto(anuncioDTO.getTipoProduto());
-        anuncio.setStock(anuncioDTO.getStock());
-        anuncio.setUnidadesMedida(anuncioDTO.getUnidadesMedida());
-        anuncio.setLocalizacao(anuncioDTO.getLocalizacao());
-
-        anuncio.setEstado(EstadoEnum.ATIVO);
-
-        // Criar lista de imagens e associá-las ao anúncio
-        List<ImagemAnuncio> imagens = anuncioDTO.getImagens().stream().map(imagemAnuncio -> {
-            ImagemAnuncio img = new ImagemAnuncio();
-            img.setImagem(imagemAnuncio.getImagem());
-            img.setAnuncio(anuncio);
-            return img;
-        }).collect(Collectors.toList());
-
-        anuncio.setImagens(imagens);
-        anuncioRepository.save(anuncio);
+    public String salvarAnuncio(AnuncioSaveDTO anuncioDTO) {
+        anuncioRepository.save(anuncioDTO.toEntity());
 
         return "Anuncio Saved";
+    }
+
+    public List<Anuncio> listarAnunciosPorCategoria(Integer idCategoria) {
+        Categoria categoria = categoriaRepository.findById(idCategoria)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+        return anuncioRepository.findByCategoria(categoria);
     }
 
 }

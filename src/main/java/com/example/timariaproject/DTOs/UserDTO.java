@@ -1,5 +1,6 @@
 package com.example.timariaproject.DTOs;
 
+import com.example.timariaproject.domain.Utilizador;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,9 @@ import java.math.BigInteger;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
+    private Integer id;
     private String nome;
     private String email;
     private BigInteger telefone;
@@ -18,4 +21,10 @@ public class UserDTO {
     private String moradafiscal;
     private String fotoperfil;
     private String descricao;
+
+    public Utilizador toIdEntity(){
+        Utilizador utilizador = new Utilizador();
+        utilizador.setId(this.id);
+        return utilizador;
+    }
 }

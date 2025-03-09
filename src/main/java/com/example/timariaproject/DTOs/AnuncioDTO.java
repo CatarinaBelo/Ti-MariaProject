@@ -2,6 +2,7 @@ package com.example.timariaproject.DTOs;
 
 import com.example.timariaproject.domain.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class AnuncioDTO {
     private String titulo;
     private String descricao;
@@ -20,12 +22,14 @@ public class AnuncioDTO {
     private LocalDateTime datacriacao;
     private LocalDateTime dataatualizacao;
     private String tipo;
-    private Utilizador utilizador;
-    private Categoria categoria;
-    private Subcategoria subcategoria;
-    private Tipoproduto tipoProduto;
+    private UserDTO utilizadorDTO;
+    private CategoriaDTO categoria;
+    private SubcategoriaDTO subcategoria;
+    private TipoprodutoDTO tipoProduto;
     private Integer stock;
-    private Unidadesmedida unidadesMedida;
-    private Localizacao localizacao;
-    private List<ImagemAnuncio> imagens;
+    private UnidadesmedidaDTO unidadesMedida;
+    private LocalizacaoDTO localizacao;
+    private String rotuloPersonalizado;
+    private List<ImagemAnuncioDTO> imagens;
+    private List<AnunciotagDTO> anuncioTags;
 }

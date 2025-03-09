@@ -1,5 +1,7 @@
 package com.example.timariaproject.domain;
 
+import com.example.timariaproject.DTOs.AnuncioDTO;
+import com.example.timariaproject.DTOs.CategoriaDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,4 +15,11 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String nomecategoria;
+
+    public CategoriaDTO toDto() {
+        return CategoriaDTO.builder()
+                .nomecategoria(this.nomecategoria)
+                .build();
+    }
+
 }

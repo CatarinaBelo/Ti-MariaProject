@@ -29,7 +29,7 @@ public class UtilizadorService {
 
         return utilizadorRepository.findByEmail(user.getUsername())
                 .map(utilizador ->
-                        new UserDTO(utilizador.getNome(), utilizador.getEmail(),
+                        new UserDTO(utilizador.getId(),utilizador.getNome(), utilizador.getEmail(),
                                 utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
                                 utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
                 .orElseThrow();
