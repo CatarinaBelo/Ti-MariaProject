@@ -8,17 +8,13 @@ import com.example.timariaproject.repository.AnuncioRepository;
 import com.example.timariaproject.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AnuncioService {
     private final AnuncioRepository anuncioRepository;
     private final CategoriaRepository categoriaRepository;
-
 
     public List<AnuncioDTO> getAllAnuncios() {
         return anuncioRepository.findAllByEstado(EstadoEnum.ATIVO)
@@ -29,7 +25,6 @@ public class AnuncioService {
 
     public String salvarAnuncio(AnuncioSaveDTO anuncioDTO) {
         anuncioRepository.save(anuncioDTO.toEntity());
-
         return "Anuncio Saved";
     }
 

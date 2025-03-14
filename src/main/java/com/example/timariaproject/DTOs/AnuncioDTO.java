@@ -21,7 +21,7 @@ public class AnuncioDTO {
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
     private LocalDateTime datacriacao;
     private LocalDateTime dataatualizacao;
-    private String tipo;
+    private TipoanuncioDTO tipoanuncio;
     private UserDTO utilizadorDTO;
     private CategoriaDTO categoria;
     private SubcategoriaDTO subcategoria;

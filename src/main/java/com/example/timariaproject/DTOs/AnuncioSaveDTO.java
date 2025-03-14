@@ -16,7 +16,7 @@ public class AnuncioSaveDTO {
     private String titulo;
     private String descricao;
     private Double preco;
-    private String tipo;
+    private TipoanuncioDTO tipoanuncio;
     private UserDTO utilizador;
     private CategoriaDTO categoria;
     private SubcategoriaDTO subcategoria;
@@ -33,7 +33,7 @@ public class AnuncioSaveDTO {
         anuncio.setTitulo(this.titulo);
         anuncio.setDescricao(this.descricao);
         anuncio.setPreco(this.preco);
-        anuncio.setTipo(this.tipo);
+        anuncio.setTipoanuncio(this.tipoanuncio != null ? this.tipoanuncio.toIdEntity() : null);
         anuncio.setUtilizador(this.utilizador != null ? this.utilizador.toIdEntity() : null);
         anuncio.setCategoria(this.categoria != null ? this.categoria.toIdEntity() : null);
         anuncio.setSubcategoria(this.subcategoria != null ? this.subcategoria.toIdEntity() : null);

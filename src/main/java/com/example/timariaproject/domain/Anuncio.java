@@ -23,8 +23,11 @@ public class Anuncio implements IEntity<AnuncioDTO> {
     private Double preco;
     private LocalDateTime datacriacao;
     private LocalDateTime dataatualizacao;
-    private String tipo;
     private EstadoEnum estado;
+
+    @ManyToOne
+    @JoinColumn(name = "idtipoanuncio")
+    private Tipoanuncio tipoanuncio;
 
     @ManyToOne
     @JoinColumn(name = "idutilizador")
@@ -79,7 +82,7 @@ public class Anuncio implements IEntity<AnuncioDTO> {
                 .preco(this.preco)
                 .datacriacao(this.datacriacao)
                 .dataatualizacao(this.dataatualizacao)
-                .tipo(this.tipo)
+                .tipoanuncio(this.tipoanuncio != null ? this.tipoanuncio.toDto() : null)
                 .utilizadorDTO(this.utilizador != null ? this.utilizador.toDto() : null)
                 .categoria(this.categoria != null ? this.categoria.toDto() : null)
                 .subcategoria(this.subcategoria != null ? this.subcategoria.toDto() : null)
