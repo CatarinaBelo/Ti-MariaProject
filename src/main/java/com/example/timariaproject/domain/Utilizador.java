@@ -1,14 +1,12 @@
 package com.example.timariaproject.domain;
 
-import com.example.timariaproject.DTOs.LocalizacaoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.beanutils.BeanUtils;
-
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "utilizador")
@@ -25,19 +23,33 @@ public class Utilizador {
     private BigInteger nif;
     private String moradafiscal;
     private String fotoperfil;
-    private Integer localizacao;
+
+    @ManyToOne
+    @JoinColumn(name = "localizacao")
+    private Localizacao localizacao;
+
     private Boolean notificacao;
     private String descricao;
 
+    @ManyToMany
+    @JoinTable(
+            name = "favoritos",
+            joinColumns = @JoinColumn(name = "idutilizador"),
+            inverseJoinColumns = @JoinColumn(name = "idanuncio")
+    )
+    private List<Anuncio> favoritos = new ArrayList<>();
+
     public UserDTO toDto() {
-        var dto = new UserDTO();
-        try {
-            BeanUtils.copyProperties(dto,this);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-        return dto;
+        return UserDTO.builder()
+                .id(this.id)
+                .nome(this.nome)
+                .email(this.email)
+                .tipoutilizador(this.tipoutilizador)
+                .telefone(this.telefone)
+                .nif(this.nif)
+                .moradafiscal(this.moradafiscal)
+                .fotoperfil(this.fotoperfil)
+                .descricao(this.descricao)
+                .build();
     }
 }

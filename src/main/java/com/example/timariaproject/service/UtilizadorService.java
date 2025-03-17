@@ -1,16 +1,21 @@
 package com.example.timariaproject.service;
 
+import com.example.timariaproject.DTOs.AnuncioDTO;
 import com.example.timariaproject.DTOs.RegistoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.DTOs.UserEditDTO;
+import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.exception.EmailAlreadyExistsException;
+import com.example.timariaproject.repository.AnuncioRepository;
 import com.example.timariaproject.repository.UserCredentialsRepository;
 import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ public class UtilizadorService {
     private final UtilizadorRepository utilizadorRepository;
     private final UserCredentialsRepository userCredentialsRepository;
     private final UserCredentialsService userCredentialsService;
+    private final AnuncioRepository anuncioRepository;
 
     public UserDTO getUserDetailsByEmail() {
         // Vai buscar qual é o user que está autenticado
@@ -80,5 +86,52 @@ public class UtilizadorService {
         return utilizador.getFotoperfil();
     }
 
+    //  Add an anuncio to favorites
+    public void addFavoriteAnuncio(Integer userId, Integer anuncioId) {
+        Utilizador user = utilizadorRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Anuncio anuncio = anuncioRepository.findById(anuncioId)
+                .orElseThrow(() -> new RuntimeException("Anuncio not found"));
+
+        // Add anuncio to user's favorite list
+        if (!user.getFavoritos().contains(anuncio)) {
+            user.getFavoritos().add(anuncio);
+            utilizadorRepository.save(user);
+        }
+    }
+
+    //  Remove an anuncio from favorites
+    public void removeFavoriteAnuncio(Integer userId, Integer anuncioId) {
+        Utilizador user = utilizadorRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Anuncio anuncio = anuncioRepository.findById(anuncioId)
+                .orElseThrow(() -> new RuntimeException("Anuncio not found"));
+
+        user.getFavoritos().remove(anuncio);
+        utilizadorRepository.save(user);
+    }
+
+    //  Get user's favorite anuncios
+    public List<AnuncioDTO> getUserFavorites(Integer userId) {
+        Utilizador user = utilizadorRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user.getFavoritos()
+                .stream()
+                .map(Anuncio::toDto)
+                .toList();
+    }
+
+    //  Check if an anuncio is in the user's favorites
+    public boolean isFavorite(Integer userId, Integer anuncioId) {
+        Utilizador user = utilizadorRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user.getFavoritos()
+                .stream()
+                .anyMatch(anuncio -> anuncio.getId().equals(anuncioId));
+    }
 
 }

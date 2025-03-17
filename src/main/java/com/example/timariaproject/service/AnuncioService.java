@@ -53,7 +53,8 @@ public class AnuncioService {
 
         return anuncioRepository
                 .findBySubcategoria(subcategoria)
-                .stream().map(Anuncio::toDto)
+                .stream()
+                .map(Anuncio::toDto)
                 .toList();
     }
 

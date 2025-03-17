@@ -1,5 +1,6 @@
 package com.example.timariaproject.controller;
 
+import com.example.timariaproject.DTOs.AnuncioDTO;
 import com.example.timariaproject.DTOs.RegistoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.DTOs.UserEditDTO;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path = "/user")
@@ -46,6 +48,33 @@ public class UtilizadorController {
         return ResponseEntity.ok(utilizadorService.showUserProfilePic());
     }
 
+    //  Add an anuncio to favorites
+    @PostMapping("/{userId}/add/favoritos/{anuncioId}")
+    public ResponseEntity<String> addFavorite(@PathVariable Integer userId, @PathVariable Integer anuncioId) {
+        utilizadorService.addFavoriteAnuncio(userId, anuncioId);
+        return ResponseEntity.ok("Anuncio added to favorites");
+    }
+
+    //  Remove an anuncio from favorites
+    @DeleteMapping("/{userId}/remove/favoritos/{anuncioId}")
+    public ResponseEntity<String> removeFavorite(@PathVariable Integer userId, @PathVariable Integer anuncioId) {
+        utilizadorService.removeFavoriteAnuncio(userId, anuncioId);
+        return ResponseEntity.ok("Anuncio removed from favorites");
+    }
+
+    //  Get all favorite anuncios of a user
+    @GetMapping("/{userId}/get/favoritos")
+    public ResponseEntity<List<AnuncioDTO>> getFavorites(@PathVariable Integer userId) {
+        List<AnuncioDTO> favoritos = utilizadorService.getUserFavorites(userId);
+        return ResponseEntity.ok(favoritos);
+    }
+
+    //  Check if an anuncio is in the user's favorites
+    @GetMapping("/{userId}/check/favoritos/{anuncioId}")
+    public ResponseEntity<Boolean> isFavorite(@PathVariable Integer userId, @PathVariable Integer anuncioId) {
+        boolean isFavorite = utilizadorService.isFavorite(userId, anuncioId);
+        return ResponseEntity.ok(isFavorite);
+    }
 
 }
 
