@@ -1,5 +1,6 @@
 package com.example.timariaproject.controller;
 
+import com.example.timariaproject.DTOs.CategoriaDTO;
 import com.example.timariaproject.domain.Categoria;
 import com.example.timariaproject.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     @GetMapping(path = "/details")
-    public ResponseEntity<List<Categoria>> listarCategorias() {
-        List<Categoria> categorias = categoriaService.getAllCategorias();
+    public ResponseEntity<List<CategoriaDTO>> listarCategorias() {
+        List<CategoriaDTO> categorias = categoriaService.getAllCategorias();
         return ResponseEntity.ok(categorias);
     }
 }

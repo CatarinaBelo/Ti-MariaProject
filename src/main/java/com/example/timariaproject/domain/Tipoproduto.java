@@ -23,6 +23,7 @@ public class Tipoproduto {
 
     public TipoprodutoDTO toDto() {
         return TipoprodutoDTO.builder()
+                .id(this.id)
                 .subcategoria(this.subcategoria != null ? this.subcategoria.toDto() : null)
                 .nometipoproduto(this.nometipoproduto)
                 .build();

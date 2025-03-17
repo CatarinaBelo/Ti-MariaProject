@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller // This means that this class is a Controller
@@ -32,8 +33,42 @@ public class AnuncioController {
     }
 
     @GetMapping("/categoria/{idCategoria}")
-    public ResponseEntity<List<Anuncio>> listarAnunciosPorCategoria(@PathVariable Integer idCategoria) {
-        List<Anuncio> anuncios = anuncioService.listarAnunciosPorCategoria(idCategoria);
+    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorCategoria(@PathVariable Integer idCategoria) {
+        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorCategoria(idCategoria);
         return ResponseEntity.ok(anuncios);
     }
+
+    @GetMapping("/subcategoria/{idSubcategoria}")
+    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorSubcategoria(@PathVariable Integer idSubcategoria) {
+        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorSubcategoria(idSubcategoria);
+        return ResponseEntity.ok(anuncios);
+    }
+
+    @GetMapping("/distrito/{idDistrito}")
+    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorDistrito(@PathVariable Integer idDistrito) {
+        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorDistrito(idDistrito);
+        return ResponseEntity.ok(anuncios);
+    }
+
+    @GetMapping("/concelho/{idConcelho}")
+    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorConcelho(@PathVariable Integer idConcelho) {
+        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorConcelho(idConcelho);
+        return ResponseEntity.ok(anuncios);
+    }
+
+    @GetMapping("/freguesia/{idFreguesia}")
+    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorFreguesia(@PathVariable Integer idFreguesia) {
+        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorFreguesia(idFreguesia);
+        return ResponseEntity.ok(anuncios);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<AnuncioDTO>> searchAnuncios(@RequestParam(required = false) String tipoProdutoNome,
+                                                           @RequestParam(required = false) String rotulo) {
+
+        List<AnuncioDTO> anuncios = anuncioService.searchAnuncios(tipoProdutoNome, rotulo);
+        return ResponseEntity.ok(anuncios);
+    }
+
+
 }

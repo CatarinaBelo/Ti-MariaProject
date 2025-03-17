@@ -39,6 +39,7 @@ public class Localizacao {
 
     public LocalizacaoDTO toDto() {
         return LocalizacaoDTO.builder()
+                .id(this.id)
                 .dataatualizacao(this.dataatualizacao)
                 .latitude(this.latitude)
                 .longitude(this.longitude)

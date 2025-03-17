@@ -24,7 +24,7 @@ public class AnuncioSaveDTO {
     private Integer stock;
     private UnidadesmedidaDTO unidadesMedida;
     private LocalizacaoDTO localizacao;
-    private String rotuloPersonalizado;
+    private String rotulopersonalizado;
     private List<ImagemAnuncioDTO> imagens = new ArrayList<>();
     private List<AnunciotagDTO> anuncioTags = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class AnuncioSaveDTO {
         anuncio.setStock(this.stock);
         anuncio.setUnidadesMedida(this.unidadesMedida != null ? this.unidadesMedida.toIdEntity() : null);
         anuncio.setLocalizacao(this.localizacao != null ? this.localizacao.toIdEntity() : null);
-        anuncio.setRotulopersonalizado(this.rotuloPersonalizado);
+        anuncio.setRotulopersonalizado(this.rotulopersonalizado);
         anuncio.setImagens(this.imagens.stream().map(ImagemAnuncioDTO::toEntity)
                 .peek(t->t.setAnuncio(anuncio)).toList());
         anuncio.setAnuncioTags(this.anuncioTags.stream()

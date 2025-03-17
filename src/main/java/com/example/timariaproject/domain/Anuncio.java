@@ -44,6 +44,7 @@ public class Anuncio implements IEntity<AnuncioDTO> {
     @ManyToOne
     @JoinColumn(name = "idtipoproduto")
     private Tipoproduto tipoProduto;
+
     private Integer stock;
 
     @ManyToOne

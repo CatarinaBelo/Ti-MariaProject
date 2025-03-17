@@ -3,7 +3,6 @@ package com.example.timariaproject.service;
 import com.example.timariaproject.DTOs.RegistoDTO;
 import com.example.timariaproject.DTOs.UserDTO;
 import com.example.timariaproject.DTOs.UserEditDTO;
-import com.example.timariaproject.domain.UserCredentials;
 import com.example.timariaproject.domain.Utilizador;
 import com.example.timariaproject.exception.EmailAlreadyExistsException;
 import com.example.timariaproject.repository.UserCredentialsRepository;
@@ -12,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-
-import java.math.BigInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +26,7 @@ public class UtilizadorService {
 
         return utilizadorRepository.findByEmail(user.getUsername())
                 .map(utilizador ->
-                        new UserDTO(utilizador.getId(),utilizador.getNome(), utilizador.getEmail(),
+                        new UserDTO(utilizador.getId(), utilizador.getNome(), utilizador.getEmail(),
                                 utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
                                 utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
                 .orElseThrow();
@@ -82,5 +79,6 @@ public class UtilizadorService {
 
         return utilizador.getFotoperfil();
     }
+
 
 }

@@ -23,6 +23,7 @@ public class Subcategoria {
 
     public SubcategoriaDTO toDto() {
         return SubcategoriaDTO.builder()
+                .id(this.id)
                 .categoria(this.categoria != null ? this.categoria.toDto() : null)
                 .nomesubcategoria(this.nomesubcategoria)
                 .build();

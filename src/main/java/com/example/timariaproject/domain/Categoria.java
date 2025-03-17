@@ -18,6 +18,7 @@ public class Categoria {
 
     public CategoriaDTO toDto() {
         return CategoriaDTO.builder()
+                .id(this.id)
                 .nomecategoria(this.nomecategoria)
                 .build();
     }
