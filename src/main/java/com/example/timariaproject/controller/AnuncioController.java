@@ -5,6 +5,7 @@ import com.example.timariaproject.DTOs.AnuncioSaveDTO;
 import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.service.AnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,13 @@ public class AnuncioController {
     @Autowired
     private AnuncioService anuncioService;
 
-    @GetMapping(path = "/details")
-    public ResponseEntity<List<AnuncioDTO>> getAnuncioDetails() {
-        return ResponseEntity.ok(anuncioService.getAllAnuncios());
+    @GetMapping("/paginated/details")
+    public ResponseEntity<Page<AnuncioDTO>> getPaginatedActiveAnuncios(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        Page<AnuncioDTO> anuncios = anuncioService.getAllAnuncios(page, size);
+        return ResponseEntity.ok(anuncios);
     }
 
     @PostMapping(path = "/add")
@@ -31,7 +36,7 @@ public class AnuncioController {
         anuncioService.salvarAnuncio(anuncioDTO);
         return ResponseEntity.ok().body("Save Anuncio Succeeded");
     }
-
+/*
     @GetMapping("/categoria/{idCategoria}")
     public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorCategoria(@PathVariable Integer idCategoria) {
         List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorCategoria(idCategoria);
@@ -61,13 +66,33 @@ public class AnuncioController {
         List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorFreguesia(idFreguesia);
         return ResponseEntity.ok(anuncios);
     }
+    */
 
-    @GetMapping("/search")
-    public ResponseEntity<List<AnuncioDTO>> searchAnuncios(@RequestParam(required = false) String tipoProdutoNome,
-                                                           @RequestParam(required = false) String rotulo) {
+    @GetMapping("/search/filter")
+    public ResponseEntity<Page<AnuncioDTO>> searchAnuncios(
+            @RequestParam(required = false) Integer categoriaId,
+            @RequestParam(required = false) Integer subcategoriaId,
+            @RequestParam(required = false) Integer distritoId,
+            @RequestParam(required = false) Integer concelhoId,
+            @RequestParam(required = false) Integer freguesiaId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Page<AnuncioDTO> result = anuncioService.searchAnunciosByFilters(
+                categoriaId, subcategoriaId, distritoId, concelhoId, freguesiaId, page, size
+        );
+        return ResponseEntity.ok(result);
+    }
 
-        List<AnuncioDTO> anuncios = anuncioService.searchAnuncios(tipoProdutoNome, rotulo);
-        return ResponseEntity.ok(anuncios);
+    @GetMapping("/search/bar")
+    public ResponseEntity<Page<AnuncioDTO>> searchAnuncios(
+            @RequestParam(required = false) String tipoProdutoNome,
+            @RequestParam(required = false) String rotulo,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        Page<AnuncioDTO> result = anuncioService.searchbarAnuncios(tipoProdutoNome, rotulo, page, size);
+        return ResponseEntity.ok(result);
     }
 
 

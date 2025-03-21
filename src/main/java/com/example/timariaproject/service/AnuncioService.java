@@ -9,6 +9,10 @@ import com.example.timariaproject.enums.EstadoEnum;
 import com.example.timariaproject.repository.*;
 import com.example.timariaproject.specifications.AnuncioSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +28,11 @@ public class AnuncioService {
     private final ConcelhoRepository concelhoRepository;
     private final FreguesiaRepository freguesiaRepository;
 
-    public List<AnuncioDTO> getAllAnuncios() {
-        return anuncioRepository.findAllByEstado(EstadoEnum.ATIVO)
-                .stream()
-                .map(Anuncio::toDto)
-                .toList();
+    public Page<AnuncioDTO> getAllAnuncios(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
+        Page<Anuncio> anunciosPage = anuncioRepository.findAllByEstado(EstadoEnum.ATIVO, pageable);
+
+        return anunciosPage.map(Anuncio::toDto);
     }
 
     public String salvarAnuncio(AnuncioSaveDTO anuncioDTO) {
@@ -36,7 +40,7 @@ public class AnuncioService {
         return "Anuncio Saved";
     }
 
-    public List<AnuncioDTO> listarAnunciosPorCategoria(Integer idCategoria) {
+    /*public List<AnuncioDTO> listarAnunciosPorCategoria(Integer idCategoria) {
         Categoria categoria = categoriaRepository.findById(idCategoria)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
@@ -86,17 +90,40 @@ public class AnuncioService {
                 .stream()
                 .map(Anuncio::toDto)
                 .toList();
+    }*/
+
+    public Page<AnuncioDTO> searchAnunciosByFilters(
+            Integer categoriaId,
+            Integer subcategoriaId,
+            Integer distritoId,
+            Integer concelhoId,
+            Integer freguesiaId,
+            int page,
+            int size
+    ) {
+        Specification<Anuncio> spec = Specification
+                .where(AnuncioSpecification.hasCategoriaId(categoriaId))
+                .and(AnuncioSpecification.hasSubcategoriaId(subcategoriaId))
+                .and(AnuncioSpecification.hasDistritoId(distritoId))
+                .and(AnuncioSpecification.hasConcelhoId(concelhoId))
+                .and(AnuncioSpecification.hasFreguesiaId(freguesiaId));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
+
+        return anuncioRepository.findAll(spec, pageable)
+                .map(Anuncio::toDto);
     }
 
-    public List<AnuncioDTO> searchAnuncios(String tipoProdutoNome, String rotulo) {
+
+    public Page<AnuncioDTO> searchbarAnuncios(String tipoProdutoNome, String rotulo, int page, int size) {
         Specification<Anuncio> spec = Specification.where(AnuncioSpecification.hasTipoProduto(tipoProdutoNome))
                 .and(AnuncioSpecification.hasRotuloPersonalizado(rotulo));
 
-        List<Anuncio> anuncios = anuncioRepository.findAll(spec);
-        return anuncios
-                .stream()
-                .map(Anuncio::toDto)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
+
+        Page<Anuncio> anunciosPage = anuncioRepository.findAll(spec, pageable);
+
+        return anunciosPage.map(Anuncio::toDto);
     }
 
 
