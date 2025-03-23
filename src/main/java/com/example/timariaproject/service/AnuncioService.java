@@ -2,9 +2,6 @@ package com.example.timariaproject.service;
 
 import com.example.timariaproject.DTOs.*;
 import com.example.timariaproject.domain.Anuncio;
-import com.example.timariaproject.domain.Categoria;
-import com.example.timariaproject.domain.Distrito;
-import com.example.timariaproject.domain.Subcategoria;
 import com.example.timariaproject.enums.EstadoEnum;
 import com.example.timariaproject.repository.*;
 import com.example.timariaproject.specifications.AnuncioSpecification;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -125,6 +123,38 @@ public class AnuncioService {
 
         return anunciosPage.map(Anuncio::toDto);
     }
+
+    public void deleteAnuncioById(Integer id) {
+        if (!anuncioRepository.existsById(id)) {
+            throw new RuntimeException("Anúncio not found with id: " + id);
+        }
+        anuncioRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void processVenda(Integer anuncioId, int quantidade) {
+        Anuncio anuncio = anuncioRepository.findById(anuncioId)
+                .orElseThrow(() -> new RuntimeException("Anúncio not found"));
+
+        if (!anuncio.getTipoanuncio().getTipo().equalsIgnoreCase("venda")) {
+            throw new RuntimeException("Anúncio is not of tipo 'venda'");
+        }
+
+        if (anuncio.getStock() == null || anuncio.getStock() < quantidade) {
+            throw new RuntimeException("Insufficient stock");
+        }
+
+        int novoStock = anuncio.getStock() - quantidade;
+        anuncio.setStock(novoStock);
+
+        if (novoStock > 0) {
+            anuncioRepository.save(anuncio);
+        } else {
+            anuncio.setEstado(EstadoEnum.NAO_ATIVO);
+        }
+    }
+
+
 
 
 }

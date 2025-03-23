@@ -1,6 +1,7 @@
 package com.example.timariaproject.DTOs;
 
 import com.example.timariaproject.domain.*;
+import com.example.timariaproject.enums.EstadoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,7 @@ public class AnuncioSaveDTO {
         anuncio.setTitulo(this.titulo);
         anuncio.setDescricao(this.descricao);
         anuncio.setPreco(this.preco);
+        anuncio.setEstado(EstadoEnum.ATIVO);
         anuncio.setTipoanuncio(this.tipoanuncio != null ? this.tipoanuncio.toIdEntity() : null);
         anuncio.setUtilizador(this.utilizador != null ? this.utilizador.toIdEntity() : null);
         anuncio.setCategoria(this.categoria != null ? this.categoria.toIdEntity() : null);

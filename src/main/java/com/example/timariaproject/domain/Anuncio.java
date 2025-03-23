@@ -3,15 +3,17 @@ package com.example.timariaproject.domain;
 import com.example.timariaproject.DTOs.AnuncioDTO;
 import com.example.timariaproject.domain.interfaces.IEntity;
 import com.example.timariaproject.enums.EstadoEnum;
+import com.example.timariaproject.enums.EstadoEnumConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "anuncio")
+@Where(clause = "estado = 1")
 @Getter
 @Setter
 public class Anuncio implements IEntity<AnuncioDTO> {
@@ -23,6 +25,8 @@ public class Anuncio implements IEntity<AnuncioDTO> {
     private Double preco;
     private LocalDateTime datacriacao;
     private LocalDateTime dataatualizacao;
+
+    @Convert(converter = EstadoEnumConverter.class)
     private EstadoEnum estado;
 
     @ManyToOne
@@ -67,7 +71,7 @@ public class Anuncio implements IEntity<AnuncioDTO> {
     protected void onCreate() {
         this.datacriacao = LocalDateTime.now();  // Define a data de criação apenas na criação
         this.dataatualizacao = LocalDateTime.now(); // Define também a primeira atualização
-        this.estado = EstadoEnum.ATIVO; // Define o estado inicial comos ATIVO
+        this.estado = EstadoEnum.ATIVO; // Define o estado inicial como ATIVO
     }
 
     @PreUpdate

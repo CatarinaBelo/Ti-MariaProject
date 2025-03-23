@@ -95,5 +95,20 @@ public class AnuncioController {
         return ResponseEntity.ok(result);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAnuncio(@PathVariable Integer id) {
+        anuncioService.deleteAnuncioById(id);
+        return ResponseEntity.ok("Anúncio deleted successfully.");
+    }
+
+    @PostMapping("/{id}/venda")
+    public ResponseEntity<String> realizarVenda(
+            @PathVariable Integer id,
+            @RequestParam int quantidade
+    ) {
+        anuncioService.processVenda(id, quantidade);
+        return ResponseEntity.ok("Venda realizada com sucesso.");
+    }
+
 
 }
