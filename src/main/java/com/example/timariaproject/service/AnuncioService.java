@@ -2,6 +2,7 @@ package com.example.timariaproject.service;
 
 import com.example.timariaproject.DTOs.*;
 import com.example.timariaproject.domain.Anuncio;
+import com.example.timariaproject.domain.Anunciotag;
 import com.example.timariaproject.enums.EstadoEnum;
 import com.example.timariaproject.repository.*;
 import com.example.timariaproject.specifications.AnuncioSpecification;
@@ -14,7 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -154,7 +158,75 @@ public class AnuncioService {
         }
     }
 
+    public void updateAnuncio(Integer anuncioId, AnuncioEditDTO dto) {
+        Anuncio anuncio = anuncioRepository.findById(
+                anuncioId).orElseThrow(() -> new RuntimeException("Anuncio not found"));
 
+        if (dto.getTitulo() != null) {
+            anuncio.setTitulo(dto.getTitulo());
+        }
+        if (dto.getDescricao() != null) {
+            anuncio.setDescricao(dto.getDescricao());
+        }
+        if (dto.getPreco() != null) {
+            anuncio.setPreco(dto.getPreco());
+        }
+        if (dto.getTipoanuncio() != null) {
+            anuncio.setTipoanuncio(dto.getTipoanuncio().toIdEntity());
+        }
+        if (dto.getCategoria() != null) {
+            anuncio.setCategoria(dto.getCategoria().toIdEntity());
+        }
+        if (dto.getSubcategoria() != null) {
+            anuncio.setSubcategoria(dto.getSubcategoria().toIdEntity());
+        }
+        if (dto.getTipoproduto() != null) {
+            anuncio.setTipoProduto(dto.getTipoproduto().toIdEntity());
+        }
+        if (dto.getStock() != null) {
+            anuncio.setStock(dto.getStock());
+        }
+        if (dto.getUnidadesMedida() != null) {
+            anuncio.setUnidadesMedida(dto.getUnidadesMedida().toIdEntity());
+        }
+        if (dto.getLocalizacao() != null) {
+            anuncio.setLocalizacao(dto.getLocalizacao().toIdEntity());
+        }
+        if (dto.getRotulopersonalizado() != null) {
+            anuncio.setRotulopersonalizado(dto.getRotulopersonalizado());
+        }
+
+        // Only update imagens if present
+        if (dto.getImagens() != null) {
+            anuncio.getImagens().clear();
+            anuncio.getImagens().addAll(dto.getImagens().stream()
+                    .map(imagemDTO -> {
+                        var imagem = imagemDTO.toEntity();
+                        imagem.setAnuncio(anuncio);
+                        return imagem;
+                    })
+                    .toList());
+        }
+
+        // Only update tags if present
+        if (dto.getAnuncioTags() != null) {
+            Set<Integer> existingTagIds = anuncio.getAnuncioTags().stream()
+                    .map(anunciotag -> anunciotag.getTag().getId())
+                    .collect(Collectors.toSet());
+
+            dto.getAnuncioTags().stream()
+                    .filter(tagDTO -> tagDTO.getTag() != null)
+                    .filter(tagDTO -> !existingTagIds.contains(tagDTO.getTag().getId())) // only new tags
+                    .map(tagDTO -> {
+                        var tag = tagDTO.toIdEntity();
+                        tag.setAnuncio(anuncio);
+                        return tag;
+                    })
+                    .forEach(anuncio.getAnuncioTags()::add);
+        }
+
+        anuncioRepository.save(anuncio);
+    }
 
 
 }

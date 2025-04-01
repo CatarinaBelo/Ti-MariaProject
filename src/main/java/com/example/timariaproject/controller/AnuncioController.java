@@ -1,7 +1,9 @@
 package com.example.timariaproject.controller;
 
 import com.example.timariaproject.DTOs.AnuncioDTO;
+import com.example.timariaproject.DTOs.AnuncioEditDTO;
 import com.example.timariaproject.DTOs.AnuncioSaveDTO;
+import com.example.timariaproject.DTOs.UserEditDTO;
 import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.service.AnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +87,7 @@ public class AnuncioController {
     }
 
     @GetMapping("/search/bar")
-    public ResponseEntity<Page<AnuncioDTO>> searchAnuncios(
+    public ResponseEntity<Page<AnuncioDTO>> searchBarAnuncios(
             @RequestParam(required = false) String tipoProdutoNome,
             @RequestParam(required = false) String rotulo,
             @RequestParam(defaultValue = "0") int page,
@@ -110,5 +112,13 @@ public class AnuncioController {
         return ResponseEntity.ok("Venda realizada com sucesso.");
     }
 
+    @PostMapping(path = "/edit/{id}")
+    public ResponseEntity<String> editUserDetails(
+            @PathVariable Integer id,
+            @RequestBody AnuncioEditDTO anuncioEditDTO
+    ) {
+        anuncioService.updateAnuncio(id, anuncioEditDTO);
+        return ResponseEntity.ok("Edit Succeeded");
+    }
 
 }
