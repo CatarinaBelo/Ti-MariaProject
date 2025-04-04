@@ -43,6 +43,11 @@ public class UtilizadorController {
         return utilizadorService.getAll();
     }
 
+    @GetMapping(path = "/id")
+    public ResponseEntity<Integer> getUserId(@RequestParam String email) {
+        return ResponseEntity.ok(utilizadorService.getUserId(email));
+    }
+
     @GetMapping(path = "/showpic")
     public ResponseEntity<String> showProfilePic() {
         return ResponseEntity.ok(utilizadorService.showUserProfilePic());

@@ -42,7 +42,8 @@ public class AnuncioSaveDTO {
         anuncio.setTipoProduto(this.tipoproduto != null ? this.tipoproduto.toIdEntity() : null);
         anuncio.setStock(this.stock);
         anuncio.setUnidadesMedida(this.unidadesMedida != null ? this.unidadesMedida.toIdEntity() : null);
-        anuncio.setLocalizacao(this.localizacao != null ? this.localizacao.toIdEntity() : null);
+        anuncio.setLocalizacao(this.localizacao != null ? this.localizacao.toEntity() : null);
+
         anuncio.setRotulopersonalizado(this.rotulopersonalizado);
         anuncio.setImagens(this.imagens.stream().map(ImagemAnuncioDTO::toEntity)
                 .peek(t->t.setAnuncio(anuncio)).toList());

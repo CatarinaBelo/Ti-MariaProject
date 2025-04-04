@@ -55,7 +55,7 @@ public class Anuncio implements IEntity<AnuncioDTO> {
     @JoinColumn(name = "idunidadesmedida")
     private Unidadesmedida unidadesMedida;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idlocalizacao")
     private Localizacao localizacao;
 

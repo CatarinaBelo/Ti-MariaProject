@@ -34,8 +34,8 @@ public class LocalizacaoDTO {
     }
 
     public Localizacao toIdEntity(){
-        Localizacao localizacao = new Localizacao();
-        localizacao.setId(this.id);
-        return localizacao;
+        Localizacao loc = new Localizacao();
+        loc.setId(this.id);
+        return loc;
     }
 }

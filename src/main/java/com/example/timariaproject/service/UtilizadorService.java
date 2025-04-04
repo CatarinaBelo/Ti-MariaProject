@@ -61,6 +61,10 @@ public class UtilizadorService {
         return "Saved";
     }
 
+    public Integer getUserId(String email) {
+        return utilizadorRepository.findByEmail(email).map(Utilizador::getId).orElse(0);
+    }
+
     public Iterable<Utilizador> getAll() {
         return utilizadorRepository.findAll();
     }
