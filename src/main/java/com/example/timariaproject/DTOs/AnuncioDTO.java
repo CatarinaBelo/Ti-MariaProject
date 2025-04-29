@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class AnuncioDTO {
+    private Integer id;
     private String titulo;
     private String descricao;
     private Double preco;

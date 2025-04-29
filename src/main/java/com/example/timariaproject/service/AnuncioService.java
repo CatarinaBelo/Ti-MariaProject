@@ -158,6 +158,14 @@ public class AnuncioService {
         }
     }
 
+
+    public AnuncioEditDTO getAnuncioDetails(Integer anuncioId) {
+        Anuncio anuncio = anuncioRepository.findById(anuncioId)
+                .orElseThrow(() -> new RuntimeException("Anúncio não encontrado com ID: " + anuncioId));
+        return anuncio.toEditDto();
+    }
+
+
     public void updateAnuncio(Integer anuncioId, AnuncioEditDTO dto) {
         Anuncio anuncio = anuncioRepository.findById(
                 anuncioId).orElseThrow(() -> new RuntimeException("Anuncio not found"));
@@ -227,6 +235,7 @@ public class AnuncioService {
 
         anuncioRepository.save(anuncio);
     }
+
 
 
 }

@@ -3,6 +3,7 @@ package com.example.timariaproject.DTOs;
 import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.enums.EstadoEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class AnuncioEditDTO {
     private String titulo;
     private String descricao;

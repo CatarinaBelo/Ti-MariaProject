@@ -1,6 +1,7 @@
 package com.example.timariaproject.domain;
 
 import com.example.timariaproject.DTOs.AnuncioDTO;
+import com.example.timariaproject.DTOs.AnuncioEditDTO;
 import com.example.timariaproject.domain.interfaces.IEntity;
 import com.example.timariaproject.enums.EstadoEnum;
 import com.example.timariaproject.enums.EstadoEnumConverter;
@@ -82,6 +83,7 @@ public class Anuncio implements IEntity<AnuncioDTO> {
     @Override
     public AnuncioDTO toDto() {
         return AnuncioDTO.builder()
+                .id(this.id)
                 .titulo(this.titulo)
                 .descricao(this.descricao)
                 .preco(this.preco)
@@ -97,6 +99,25 @@ public class Anuncio implements IEntity<AnuncioDTO> {
                 .imagens(this.imagens.stream().map(ImagemAnuncio::toDto).toList())
                 .localizacao(this.localizacao != null ? this.localizacao.toDto() : null)
                 .rotuloPersonalizado(this.rotulopersonalizado)
+                .anuncioTags(this.anuncioTags.stream().map(Anunciotag::toDto).toList())
+                .build();
+    }
+
+
+    public AnuncioEditDTO toEditDto() {
+        return AnuncioEditDTO.builder()
+                .titulo(this.titulo)
+                .descricao(this.descricao)
+                .preco(this.preco)
+                .tipoanuncio(this.tipoanuncio != null ? this.tipoanuncio.toDto() : null)
+                .categoria(this.categoria != null ? this.categoria.toDto() : null)
+                .subcategoria(this.subcategoria != null ? this.subcategoria.toDto() : null)
+                .tipoproduto(this.tipoProduto != null ? this.tipoProduto.toDto() : null)
+                .stock(this.stock)
+                .unidadesMedida(this.unidadesMedida != null ? this.unidadesMedida.toDto() : null)
+                .imagens(this.imagens.stream().map(ImagemAnuncio::toDto).toList())
+                .localizacao(this.localizacao != null ? this.localizacao.toDto() : null)
+                .rotulopersonalizado(this.rotulopersonalizado)
                 .anuncioTags(this.anuncioTags.stream().map(Anunciotag::toDto).toList())
                 .build();
     }

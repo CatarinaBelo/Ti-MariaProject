@@ -38,37 +38,6 @@ public class AnuncioController {
         anuncioService.salvarAnuncio(anuncioDTO);
         return ResponseEntity.ok().body("Save Anuncio Succeeded");
     }
-/*
-    @GetMapping("/categoria/{idCategoria}")
-    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorCategoria(@PathVariable Integer idCategoria) {
-        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorCategoria(idCategoria);
-        return ResponseEntity.ok(anuncios);
-    }
-
-    @GetMapping("/subcategoria/{idSubcategoria}")
-    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorSubcategoria(@PathVariable Integer idSubcategoria) {
-        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorSubcategoria(idSubcategoria);
-        return ResponseEntity.ok(anuncios);
-    }
-
-    @GetMapping("/distrito/{idDistrito}")
-    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorDistrito(@PathVariable Integer idDistrito) {
-        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorDistrito(idDistrito);
-        return ResponseEntity.ok(anuncios);
-    }
-
-    @GetMapping("/concelho/{idConcelho}")
-    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorConcelho(@PathVariable Integer idConcelho) {
-        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorConcelho(idConcelho);
-        return ResponseEntity.ok(anuncios);
-    }
-
-    @GetMapping("/freguesia/{idFreguesia}")
-    public ResponseEntity<List<AnuncioDTO>> listarAnunciosPorFreguesia(@PathVariable Integer idFreguesia) {
-        List<AnuncioDTO> anuncios = anuncioService.listarAnunciosPorFreguesia(idFreguesia);
-        return ResponseEntity.ok(anuncios);
-    }
-    */
 
     @GetMapping("/search/filter")
     public ResponseEntity<Page<AnuncioDTO>> searchAnuncios(
@@ -112,8 +81,15 @@ public class AnuncioController {
         return ResponseEntity.ok("Venda realizada com sucesso.");
     }
 
+    @GetMapping("/anunciodetails/{id}")
+    public ResponseEntity<AnuncioEditDTO> getAnuncioById(@PathVariable Integer id) {
+        AnuncioEditDTO anuncioDTO = anuncioService.getAnuncioDetails(id);
+        return ResponseEntity.ok(anuncioDTO);
+    }
+
+
     @PostMapping(path = "/edit/{id}")
-    public ResponseEntity<String> editUserDetails(
+    public ResponseEntity<String> editAnuncioDetails(
             @PathVariable Integer id,
             @RequestBody AnuncioEditDTO anuncioEditDTO
     ) {
