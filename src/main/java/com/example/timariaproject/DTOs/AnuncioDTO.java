@@ -33,4 +33,7 @@ public class AnuncioDTO {
     private String rotuloPersonalizado;
     private List<ImagemAnuncioDTO> imagens;
     private List<AnunciotagDTO> anuncioTags;
+
+
+
 }
