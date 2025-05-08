@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.criteria.Predicate;
+
 
 import java.util.HashSet;
 import java.util.List;
@@ -118,13 +120,21 @@ public class AnuncioService {
 
 
     public Page<AnuncioDTO> searchbarAnuncios(String tipoProdutoNome, String rotulo, int page, int size) {
-        Specification<Anuncio> spec = Specification.where(AnuncioSpecification.hasTipoProduto(tipoProdutoNome))
-                .and(AnuncioSpecification.hasRotuloPersonalizado(rotulo));
+        Specification<Anuncio> spec = (root, query, cb) -> {
+            Predicate predicateTipo = AnuncioSpecification.hasTipoProduto(tipoProdutoNome).toPredicate(root, query, cb);
+            Predicate predicateRotulo = AnuncioSpecification.hasRotuloPersonalizado(rotulo).toPredicate(root, query, cb);
+
+            if (predicateTipo != null && predicateRotulo != null) {
+                return cb.or(predicateTipo, predicateRotulo); // OR entre os dois
+            } else if (predicateTipo != null) {
+                return predicateTipo;
+            } else {
+                return predicateRotulo;
+            }
+        };
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
-
         Page<Anuncio> anunciosPage = anuncioRepository.findAll(spec, pageable);
-
         return anunciosPage.map(Anuncio::toDto);
     }
 
