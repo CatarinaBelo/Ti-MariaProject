@@ -79,4 +79,15 @@ public class AnuncioSpecification {
         };
     }
 
+    public static Specification<Anuncio> hasTagId(Integer tagId) {
+        return (Root<Anuncio> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
+            if (tagId == null) {
+                return null;
+            }
+            Join<Anuncio, Anunciotag> joinTag = root.join("anuncioTags");
+            return cb.equal(joinTag.get("tag").get("id"), tagId);
+        };
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.timariaproject.controller;
 
+import com.example.timariaproject.DTOs.CarrinhoBatchDTO;
 import com.example.timariaproject.DTOs.CarrinhoDTO;
 import com.example.timariaproject.service.CarrinhoService;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +16,20 @@ public class CarrinhoController {
 
     private final CarrinhoService carrinhoService;
 
-    @PostMapping("/add/{idUtilizador}/{idAnuncio}")
-    public ResponseEntity<String> adicionarAoCarrinho(
-            @PathVariable Integer idUtilizador,
-            @PathVariable Integer idAnuncio,
-            @RequestParam int quantidade
-    ) {
-        String mensagem = carrinhoService.addToCarrinho(idUtilizador, idAnuncio, quantidade);
-        return ResponseEntity.ok(mensagem);
+    @PostMapping("/add-batch")
+    public ResponseEntity<List<String>> adicionarAoCarrinhoBatch(@RequestBody CarrinhoBatchDTO batchDTO) {
+        System.out.println("ID Utilizador recebido: " + batchDTO.getIdUtilizador());
+        System.out.println("Itens recebidos:");
+        if (batchDTO.getItens() != null) {
+            batchDTO.getItens().forEach(item ->
+                    System.out.println("ID Anúncio: " + item.getIdAnuncio() + ", Quantidade: " + item.getQuantidade())
+            );
+        } else {
+            System.out.println("Itens é null!");
+        }
+
+        List<String> mensagens = carrinhoService.addItensToCarrinho(batchDTO);
+        return ResponseEntity.ok(mensagens);
     }
 
     @DeleteMapping("/remove/{idCarrinho}")

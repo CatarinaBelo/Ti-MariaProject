@@ -14,10 +14,8 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/favoritos")
 public class FavoritosController {
-
     @Autowired
     private FavoritosService favoritosService;
-
     /*
       Adiciona um anúncio aos favoritos do utilizador.
      * Endpoint: POST /favoritos/addFavorito/{idUtilizador}/{idAnuncio}
@@ -30,7 +28,6 @@ public class FavoritosController {
         favoritosService.adicionarFavorito(idUtilizador, idAnuncio);
         return ResponseEntity.ok().build();
     }
-
     /*
       Remove um anúncio dos favoritos do utilizador.
      * Endpoint: DELETE /favoritos/deleteFavorito/{idUtilizador}/{idAnuncio}
@@ -43,7 +40,6 @@ public class FavoritosController {
         favoritosService.removerFavorito(idUtilizador, idAnuncio);
         return ResponseEntity.ok().build();
     }
-
     /*
       Lista todos os favoritos do utilizador.
      * Endpoint: GET /favoritos/getFavoritos/{idUtilizador}

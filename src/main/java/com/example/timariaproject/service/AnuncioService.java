@@ -102,6 +102,7 @@ public class AnuncioService {
             Integer distritoId,
             Integer concelhoId,
             Integer freguesiaId,
+            Integer tagId, // novo
             int page,
             int size
     ) {
@@ -110,12 +111,11 @@ public class AnuncioService {
                 .and(AnuncioSpecification.hasSubcategoriaId(subcategoriaId))
                 .and(AnuncioSpecification.hasDistritoId(distritoId))
                 .and(AnuncioSpecification.hasConcelhoId(concelhoId))
-                .and(AnuncioSpecification.hasFreguesiaId(freguesiaId));
+                .and(AnuncioSpecification.hasFreguesiaId(freguesiaId))
+                .and(AnuncioSpecification.hasTagId(tagId)); // aplicar filtro
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
-
-        return anuncioRepository.findAll(spec, pageable)
-                .map(Anuncio::toDto);
+        return anuncioRepository.findAll(spec, pageable).map(Anuncio::toDto);
     }
 
 

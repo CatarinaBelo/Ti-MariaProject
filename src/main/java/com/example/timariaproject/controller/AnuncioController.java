@@ -46,11 +46,12 @@ public class AnuncioController {
             @RequestParam(required = false) Integer distritoId,
             @RequestParam(required = false) Integer concelhoId,
             @RequestParam(required = false) Integer freguesiaId,
+            @RequestParam(required = false) Integer tagId, // novo
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
         Page<AnuncioDTO> result = anuncioService.searchAnunciosByFilters(
-                categoriaId, subcategoriaId, distritoId, concelhoId, freguesiaId, page, size
+                categoriaId, subcategoriaId, distritoId, concelhoId, freguesiaId, tagId, page, size
         );
         return ResponseEntity.ok(result);
     }

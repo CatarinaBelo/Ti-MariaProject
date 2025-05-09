@@ -1,6 +1,8 @@
 package com.example.timariaproject.service;
 
+import com.example.timariaproject.DTOs.CarrinhoBatchDTO;
 import com.example.timariaproject.DTOs.CarrinhoDTO;
+import com.example.timariaproject.DTOs.CarrinhoItemDTO;
 import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.domain.Carrinho;
 import com.example.timariaproject.domain.Utilizador;
@@ -10,6 +12,7 @@ import com.example.timariaproject.repository.UtilizadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,33 +23,51 @@ public class CarrinhoService {
     private final UtilizadorRepository utilizadorRepository;
     private final AnuncioRepository anuncioRepository;
 
-    public String  addToCarrinho(Integer idUtilizador, Integer idAnuncio, int quantidade) {
-        if (quantidade <= 0) return "A quantidade deve ser maior que zero.";
+    public List<String> addItensToCarrinho(CarrinhoBatchDTO batchDTO) {
+        List<String> mensagens = new ArrayList<>();
+        Integer idUtilizador = batchDTO.getIdUtilizador();
 
         Utilizador utilizador = utilizadorRepository.findById(idUtilizador)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
-        Anuncio anuncio = anuncioRepository.findById(idAnuncio)
-                .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
+        for (CarrinhoItemDTO item : batchDTO.getItens()) {
+            Integer idAnuncio = item.getIdAnuncio();
+            int quantidade = item.getQuantidade();
 
-        Carrinho carrinho = carrinhoRepository.findByUtilizadorAndAnuncio(utilizador, anuncio).orElse(null);
-        int quantidadeAtual = carrinho != null ? carrinho.getQuantidade() : 0;
-        int novaQuantidade = quantidadeAtual + quantidade;
+            if (quantidade <= 0) {
+                mensagens.add("Quantidade inválida para anúncio " + idAnuncio);
+                continue;
+            }
 
-        if (novaQuantidade > anuncio.getStock()) {
-            return "A quantidade excede o stock disponível. Stock atual: " + anuncio.getStock();
+            Anuncio anuncio = anuncioRepository.findById(idAnuncio)
+                    .orElse(null);
+
+            if (anuncio == null) {
+                mensagens.add("Anúncio " + idAnuncio + " não encontrado.");
+                continue;
+            }
+
+            Carrinho carrinho = carrinhoRepository.findByUtilizadorAndAnuncio(utilizador, anuncio).orElse(null);
+            int quantidadeAtual = carrinho != null ? carrinho.getQuantidade() : 0;
+            int novaQuantidade = quantidadeAtual + quantidade;
+
+            if (novaQuantidade > anuncio.getStock()) {
+                mensagens.add("Stock insuficiente para anúncio " + idAnuncio + ". Stock atual: " + anuncio.getStock());
+                continue;
+            }
+
+            if (carrinho == null) {
+                carrinho = new Carrinho();
+                carrinho.setUtilizador(utilizador);
+                carrinho.setAnuncio(anuncio);
+            }
+
+            carrinho.setQuantidade(novaQuantidade);
+            carrinhoRepository.save(carrinho);
+            mensagens.add("Anúncio " + idAnuncio + " adicionado com sucesso.");
         }
 
-        if (carrinho == null) {
-            carrinho = new Carrinho();
-            carrinho.setUtilizador(utilizador);
-            carrinho.setAnuncio(anuncio);
-        }
-
-        carrinho.setQuantidade(novaQuantidade);
-        carrinhoRepository.save(carrinho);
-
-        return "Produto adicionado ao carrinho com sucesso.";
+        return mensagens;
     }
 
     public void removeFromCarrinho(Integer idCarrinho) {
