@@ -19,6 +19,7 @@ import jakarta.persistence.criteria.Predicate;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -175,6 +176,13 @@ public class AnuncioService {
         return anuncio.toDto();
     }
 
+    public List<AnuncioDTO> getAnunciosByUser(Integer idUtilizador) {
+        List<Anuncio> anuncios = anuncioRepository.findByUtilizadorId(idUtilizador);
+        return anuncios.stream()
+                .map(Anuncio::toDto)
+                .collect(Collectors.toList());
+    }
+
 
     public void updateAnuncio(Integer anuncioId, AnuncioEditDTO dto) {
         Anuncio anuncio = anuncioRepository.findById(
@@ -246,6 +254,17 @@ public class AnuncioService {
         anuncioRepository.save(anuncio);
     }
 
+    public void updateStock(Integer id, int novoStock) {
+        if (novoStock < 0) {
+            throw new IllegalArgumentException("O stock não pode ser negativo.");
+        }
+
+        Anuncio anuncio = anuncioRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Anúncio não encontrado"));
+
+        anuncio.setStock(novoStock);
+        anuncioRepository.save(anuncio);
+    }
 
 
 }

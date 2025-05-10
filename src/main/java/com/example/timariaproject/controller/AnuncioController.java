@@ -8,6 +8,7 @@ import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.service.AnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path = "/anuncio")
@@ -98,4 +100,24 @@ public class AnuncioController {
         return ResponseEntity.ok("Edit Succeeded");
     }
 
+    @PutMapping("/{id}/stock")
+    public ResponseEntity<String> updateStock(
+            @PathVariable Integer id,
+            @RequestParam int novoStock) {
+
+        try {
+            anuncioService.updateStock(id, novoStock);
+            return ResponseEntity.ok("Stock atualizado com sucesso.");
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anúncio não encontrado.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/utilizador/{userId}")
+    public ResponseEntity<List<AnuncioDTO>> getAnunciosByUser(@PathVariable Integer userId) {
+        List<AnuncioDTO> anuncios = anuncioService.getAnunciosByUser(userId);
+        return ResponseEntity.ok(anuncios);
+    }
 }

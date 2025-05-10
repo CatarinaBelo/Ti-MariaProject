@@ -21,4 +21,5 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, Integer>, JpaS
     List<Anuncio> findByLocalizacao_DistritoId(Integer idDistrito);
     List<Anuncio> findByLocalizacao_ConcelhoId(Integer idConcelho);
     List<Anuncio> findByLocalizacao_FreguesiaId(Integer idFreguesia);
+    List<Anuncio> findByUtilizadorId(Integer idUtilizador);
 }
