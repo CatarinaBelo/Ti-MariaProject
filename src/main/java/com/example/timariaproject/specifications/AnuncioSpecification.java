@@ -7,6 +7,8 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
+
 public class AnuncioSpecification {
     public static Specification<Anuncio> hasCategoriaId(Integer categoriaId) {
         return (Root<Anuncio> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
@@ -89,5 +91,34 @@ public class AnuncioSpecification {
         };
     }
 
+    public static Specification<Anuncio> hasCategoriaIds(List<Integer> categoriaIds) {
+        return (root, query, cb) -> {
+            if (categoriaIds == null || categoriaIds.isEmpty()) return null;
+            return root.get("categoria").get("id").in(categoriaIds);
+        };
+    }
+
+    public static Specification<Anuncio> hasSubcategoriaIds(List<Integer> subcategoriaIds) {
+        return (root, query, cb) -> {
+            if (subcategoriaIds == null || subcategoriaIds.isEmpty()) return null;
+            return root.get("subcategoria").get("id").in(subcategoriaIds);
+        };
+    }
+
+    public static Specification<Anuncio> hasDistritoIds(List<Integer> distritoIds) {
+        return (root, query, cb) -> {
+            if (distritoIds == null || distritoIds.isEmpty()) return null;
+            Join<Anuncio, Localizacao> locJoin = root.join("localizacao");
+            return locJoin.get("distrito").get("id").in(distritoIds);
+        };
+    }
+
+    public static Specification<Anuncio> hasTagIds(List<Integer> tagIds) {
+        return (root, query, cb) -> {
+            if (tagIds == null || tagIds.isEmpty()) return null;
+            Join<Anuncio, Anunciotag> tagJoin = root.join("anuncioTags");
+            return tagJoin.get("tag").get("id").in(tagIds);
+        };
+    }
 
 }

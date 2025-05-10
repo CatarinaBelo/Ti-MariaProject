@@ -98,22 +98,18 @@ public class AnuncioService {
     }*/
 
     public Page<AnuncioDTO> searchAnunciosByFilters(
-            Integer categoriaId,
-            Integer subcategoriaId,
-            Integer distritoId,
-            Integer concelhoId,
-            Integer freguesiaId,
-            Integer tagId, // novo
+            List<Integer> categoriaIds,
+            List<Integer> subcategoriaIds,
+            List<Integer> distritoIds,
+            List<Integer> tagIds,
             int page,
             int size
     ) {
         Specification<Anuncio> spec = Specification
-                .where(AnuncioSpecification.hasCategoriaId(categoriaId))
-                .and(AnuncioSpecification.hasSubcategoriaId(subcategoriaId))
-                .and(AnuncioSpecification.hasDistritoId(distritoId))
-                .and(AnuncioSpecification.hasConcelhoId(concelhoId))
-                .and(AnuncioSpecification.hasFreguesiaId(freguesiaId))
-                .and(AnuncioSpecification.hasTagId(tagId)); // aplicar filtro
+                .where(AnuncioSpecification.hasCategoriaIds(categoriaIds))
+                .and(AnuncioSpecification.hasSubcategoriaIds(subcategoriaIds))
+                .and(AnuncioSpecification.hasDistritoIds(distritoIds))
+                .and(AnuncioSpecification.hasTagIds(tagIds));
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
         return anuncioRepository.findAll(spec, pageable).map(Anuncio::toDto);

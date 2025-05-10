@@ -43,17 +43,15 @@ public class AnuncioController {
 
     @GetMapping("/search/filter")
     public ResponseEntity<Page<AnuncioDTO>> searchAnuncios(
-            @RequestParam(required = false) Integer categoriaId,
-            @RequestParam(required = false) Integer subcategoriaId,
-            @RequestParam(required = false) Integer distritoId,
-            @RequestParam(required = false) Integer concelhoId,
-            @RequestParam(required = false) Integer freguesiaId,
-            @RequestParam(required = false) Integer tagId, // novo
+            @RequestParam(required = false) List<Integer> categoriaIds,
+            @RequestParam(required = false) List<Integer> subcategoriaIds,
+            @RequestParam(required = false) List<Integer> distritoIds,
+            @RequestParam(required = false) List<Integer> tagIds,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
         Page<AnuncioDTO> result = anuncioService.searchAnunciosByFilters(
-                categoriaId, subcategoriaId, distritoId, concelhoId, freguesiaId, tagId, page, size
+                categoriaIds, subcategoriaIds, distritoIds, tagIds, page, size
         );
         return ResponseEntity.ok(result);
     }
