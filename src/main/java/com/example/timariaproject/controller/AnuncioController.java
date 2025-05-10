@@ -83,8 +83,8 @@ public class AnuncioController {
     }
 
     @GetMapping("/anunciodetails/{id}")
-    public ResponseEntity<AnuncioEditDTO> getAnuncioById(@PathVariable Integer id) {
-        AnuncioEditDTO anuncioDTO = anuncioService.getAnuncioDetails(id);
+    public ResponseEntity<AnuncioDTO> getAnuncioById(@PathVariable Integer id) {
+        AnuncioDTO anuncioDTO = anuncioService.getAnuncioDetails(id);
         return ResponseEntity.ok(anuncioDTO);
     }
 

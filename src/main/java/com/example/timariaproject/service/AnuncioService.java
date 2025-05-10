@@ -169,10 +169,10 @@ public class AnuncioService {
     }
 
 
-    public AnuncioEditDTO getAnuncioDetails(Integer anuncioId) {
+    public AnuncioDTO getAnuncioDetails(Integer anuncioId) {
         Anuncio anuncio = anuncioRepository.findById(anuncioId)
                 .orElseThrow(() -> new RuntimeException("Anúncio não encontrado com ID: " + anuncioId));
-        return anuncio.toEditDto();
+        return anuncio.toDto();
     }
 
 
