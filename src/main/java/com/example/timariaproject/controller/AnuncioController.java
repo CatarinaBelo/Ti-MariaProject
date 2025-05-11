@@ -113,9 +113,22 @@ public class AnuncioController {
         }
     }
 
+    @PutMapping("/{id}/desconto")
+    public ResponseEntity<String> aplicarDesconto(@PathVariable Integer id,
+                                                  @RequestParam double valorpercentagem) {
+        anuncioService.aplicarDesconto(id, valorpercentagem);
+        return ResponseEntity.ok("Preço Atualizado com Desconto");
+    }
+
     @GetMapping("/utilizador/{userId}")
     public ResponseEntity<List<AnuncioDTO>> getAnunciosByUser(@PathVariable Integer userId) {
         List<AnuncioDTO> anuncios = anuncioService.getAnunciosByUser(userId);
+        return ResponseEntity.ok(anuncios);
+    }
+
+    @GetMapping("/tipoanuncio/{idTipoanuncio}")
+    public ResponseEntity<List<AnuncioDTO>> getByTipoAnuncio(@PathVariable Integer idTipoanuncio) {
+        List<AnuncioDTO> anuncios = anuncioService.findByTipoAnuncioId(idTipoanuncio);
         return ResponseEntity.ok(anuncios);
     }
 }

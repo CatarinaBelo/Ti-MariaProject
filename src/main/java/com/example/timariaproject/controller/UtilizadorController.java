@@ -48,6 +48,18 @@ public class UtilizadorController {
         return ResponseEntity.ok(utilizadorService.getUserId(email));
     }
 
+    @GetMapping("/produtores")
+    public ResponseEntity<List<UserDTO>> getAllProdutores() {
+        List<UserDTO> produtores = utilizadorService.getUtilizadoresProdutores();
+        return ResponseEntity.ok(produtores);
+    }
+
+    @GetMapping("/detalhesUser/{id}")
+    public ResponseEntity<UserDTO> getUtilizadorById(@PathVariable Integer id) {
+        UserDTO user = utilizadorService.getUtilizadorById(id);
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping(path = "/showpic")
     public ResponseEntity<String> showProfilePic() {
         return ResponseEntity.ok(utilizadorService.showUserProfilePic());

@@ -262,5 +262,23 @@ public class AnuncioService {
         anuncioRepository.save(anuncio);
     }
 
+    public void aplicarDesconto(Integer id, double valorpercentagem) {
+        Anuncio anuncio = anuncioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Anúncio não encontrado com ID: " + id));
+
+        double precoOriginal = anuncio.getPreco();
+        double descontoDecimal = valorpercentagem / 100.0; // Converter para 0.2 por exemplo
+        double novoPreco = precoOriginal * (1 - descontoDecimal);
+
+        anuncio.setPreco(novoPreco);
+        anuncioRepository.save(anuncio);
+    }
+
+    public List<AnuncioDTO> findByTipoAnuncioId(Integer idTipoanuncio) {
+        List<Anuncio> anuncios = anuncioRepository.findByTipoanuncioId(idTipoanuncio);
+        return anuncios.stream()
+                .map(Anuncio::toDto)
+                .collect(Collectors.toList());
+    }
 
 }

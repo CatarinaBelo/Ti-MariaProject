@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +89,24 @@ public class UtilizadorService {
         var utilizador = utilizadorRepository.findByEmail(user.getUsername()).orElseThrow();
 
         return utilizador.getFotoperfil();
+    }
+
+    public List<UserDTO> getUtilizadoresProdutores() {
+        List<Utilizador> produtores = utilizadorRepository.findByTipoutilizador("Produtor");
+        return produtores.stream()
+                .map(utilizador ->
+                        new UserDTO(utilizador.getId(), utilizador.getNome(), utilizador.getEmail(),
+                                utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
+                                utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao()))
+                .collect(Collectors.toList());
+    }
+
+    public UserDTO getUtilizadorById(Integer id) {
+        Utilizador utilizador = utilizadorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilizador não encontrado com ID: " + id));
+        return new UserDTO(utilizador.getId(), utilizador.getNome(), utilizador.getEmail(),
+                utilizador.getTelefone(), utilizador.getNif(), utilizador.getTipoutilizador(),
+                utilizador.getMoradafiscal(), utilizador.getFotoperfil(), utilizador.getDescricao());
     }
 
     //  Add an anuncio to favorites
