@@ -10,6 +10,7 @@ import com.example.timariaproject.repository.UtilizadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,15 +25,12 @@ public class LikePostagemService {
 
     @Autowired
     private UtilizadorRepository utilizadorRepository;
-    @Autowired
-    private LikePostagemRepository likePostagemRepository;
 
-    public LikeDTO darLike(LikeDTO dto) {
-        Utilizador utilizador = utilizadorRepository.findById(dto.getUserId().intValue())
+    public LikeDTO darLike(LikeDTO dto, Principal principal) {
+        Utilizador utilizador = utilizadorRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
-
-        if (likePostagemRepository.existsByPostagemIdAndUtilizador(dto.getPostagemId(), utilizador)) {
+        if (likeRepository.existsByPostagemIdAndUtilizador(dto.getPostagemId(), utilizador)) {
             throw new RuntimeException("Já deu like nesta postagem");
         }
 
@@ -57,8 +55,7 @@ public class LikePostagemService {
         return LikeDTO.builder()
                 .id(like.getId())
                 .postagemId(like.getPostagem().getId())
-                .userId(Long.valueOf(like.getUtilizador().getId()))
-
+                .utilizadorId(like.getUtilizador().getId().longValue())
                 .build();
     }
 }

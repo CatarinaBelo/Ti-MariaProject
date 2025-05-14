@@ -1,14 +1,17 @@
 package com.example.timariaproject.DTOs;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ComentarioDTO {
     private Long id;
     private String texto;
-    private String autor;      // Nome ou e-mail do autor, para visualização
-    private Long userId;       // ← NECESSÁRIO para criação do comentário
+
     private Long postagemId;
+
+    private Long utilizadorId; // ← opcional, se autenticado no backend
+    private String nomeAutor;  // ← nome para exibição
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Comentario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,9 +18,8 @@ public class Comentario {
     private String texto;
 
     @ManyToOne
-    @JoinColumn(name = "autor", nullable = false)
-    private Utilizador autor;
-
+    @JoinColumn(name = "utilizador_id", nullable = false)
+    private Utilizador utilizador;
 
     @ManyToOne
     @JoinColumn(name = "postagem_id", nullable = false)

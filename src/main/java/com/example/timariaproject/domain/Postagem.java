@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Postagem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,6 +17,11 @@ public class Postagem {
     @Column(nullable = false, length = 1000)
     private String conteudo;
 
-    @Column(nullable = false)
-    private String autor;  // Ou podes fazer relação com entidade Utilizador
+    // Relação correta com o utilizador autenticado
+    @ManyToOne
+    @JoinColumn(name = "utilizador_id", nullable = false)
+    private Utilizador utilizador;
+
+    // Campo opcional, apenas para mostrar o nome na altura do post
+    private String autor;
 }

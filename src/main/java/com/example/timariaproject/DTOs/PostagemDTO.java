@@ -9,5 +9,7 @@ import lombok.*;
 public class PostagemDTO {
     private Long id;
     private String conteudo;
-    private String autor;
+
+    private Long utilizadorId;  // ← ID do utilizador (opcional se autenticado)
+    private String nomeAutor;   // ← nome visível do autor
 }

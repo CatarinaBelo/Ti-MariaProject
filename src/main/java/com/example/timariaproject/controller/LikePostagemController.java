@@ -5,6 +5,7 @@ import com.example.timariaproject.service.LikePostagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,8 +17,8 @@ public class LikePostagemController {
     private LikePostagemService likeService;
 
     @PostMapping
-    public LikeDTO like(@RequestBody LikeDTO dto) {
-        return likeService.darLike(dto);
+    public LikeDTO like(@RequestBody LikeDTO dto, Principal principal) {
+        return likeService.darLike(dto, principal);
     }
 
     @GetMapping("/postagem/{postagemId}")
@@ -25,3 +26,4 @@ public class LikePostagemController {
         return likeService.listarPorPostagem(postagemId);
     }
 }
+

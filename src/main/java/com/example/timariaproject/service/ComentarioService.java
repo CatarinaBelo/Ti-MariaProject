@@ -10,6 +10,7 @@ import com.example.timariaproject.repository.UtilizadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,21 +26,21 @@ public class ComentarioService {
     @Autowired
     private UtilizadorRepository utilizadorRepository;
 
-    public ComentarioDTO criarComentario(ComentarioDTO dto) {
+    public ComentarioDTO criarComentario(ComentarioDTO dto, Principal principal) {
+        Utilizador utilizador = utilizadorRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
+
         Postagem postagem = postagemRepository.findById(dto.getPostagemId())
                 .orElseThrow(() -> new RuntimeException("Postagem não encontrada"));
 
-        Utilizador autor = utilizadorRepository.findById(dto.getUserId().intValue())
-                .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
-
-
         Comentario comentario = new Comentario();
         comentario.setTexto(dto.getTexto());
-        comentario.setAutor(autor);
         comentario.setPostagem(postagem);
+        comentario.setUtilizador(utilizador);
 
-        comentario = comentarioRepository.save(comentario);
-        return toDTO(comentario);
+        Comentario salvo = comentarioRepository.save(comentario);
+
+        return toDTO(salvo);
     }
 
     public List<ComentarioDTO> listarPorPostagem(Long postagemId) {
@@ -52,11 +53,9 @@ public class ComentarioService {
         return ComentarioDTO.builder()
                 .id(comentario.getId())
                 .texto(comentario.getTexto())
-                .autor(comentario.getAutor().getNome()) // ou .getUsername()
-                .userId(comentario.getAutor().getId().longValue())
-                // <-- Adiciona isto
                 .postagemId(comentario.getPostagem().getId())
+                .utilizadorId(Long.valueOf(comentario.getUtilizador().getId()))
+                .nomeAutor(comentario.getUtilizador().getNome())
                 .build();
     }
-
 }
