@@ -63,8 +63,11 @@ public class UtilizadorService {
     }
 
     public Integer getUserId(String email) {
-        return utilizadorRepository.findByEmail(email).map(Utilizador::getId).orElse(0);
+        return utilizadorRepository.findByEmail(email)
+                .map(Utilizador::getId)
+                .orElseThrow(() -> new RuntimeException("Utilizador não encontrado para o email: " + email));
     }
+
 
     public Iterable<Utilizador> getAll() {
         return utilizadorRepository.findAll();

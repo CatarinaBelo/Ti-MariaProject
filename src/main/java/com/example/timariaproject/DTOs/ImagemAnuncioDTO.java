@@ -1,6 +1,6 @@
 package com.example.timariaproject.DTOs;
 
-import com.example.timariaproject.domain.Anuncio;
+import  com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.domain.Concelho;
 import com.example.timariaproject.domain.ImagemAnuncio;
 import lombok.*;

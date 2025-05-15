@@ -3,9 +3,9 @@ spring:
   application:
     name: Ti-MariaProject
   datasource:
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://localhost:5432/TiMaria
     username: postgres
-    password: password
+    password: newpassword
     driver-class-name: org.postgresql.Driver
 
   jpa:
