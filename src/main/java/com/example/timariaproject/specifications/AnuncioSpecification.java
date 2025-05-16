@@ -1,10 +1,7 @@
 package com.example.timariaproject.specifications;
 
 import com.example.timariaproject.domain.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
@@ -120,5 +117,64 @@ public class AnuncioSpecification {
             return tagJoin.get("tag").get("id").in(tagIds);
         };
     }
+
+
+    public static Specification<Anuncio> hastipoanuncioIds(List<Integer> tipoanuncioIds) {
+        return (root, query, cb) -> {
+            if (tipoanuncioIds == null || tipoanuncioIds.isEmpty()) return null;
+            Join<Anuncio, Tipoanuncio> tipoanuncioJoin = root.join("tipoanuncio");
+            return tipoanuncioJoin.get("id").in(tipoanuncioIds);
+        };
+    }
+
+   /* public static Specification<Anuncio> withinRaioKm(Double latitude, Double longitude, Double raioKm) {
+        return (Root<Anuncio> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
+            if (latitude == null || longitude == null || raioKm == null) {
+                return null;
+            }
+
+            Join<Anuncio, Localizacao> localizacaoJoin = root.join("localizacao");
+
+            // Obter latitude e longitude como Number
+            Expression<Number> latMicro = localizacaoJoin.get("latitude");
+            Expression<Number> longMicro = localizacaoJoin.get("longitude");
+
+// Dividir para converter de micrograus para graus (mantendo Expression<Number>)
+            Expression<Number> latDegrees = cb.quot(latMicro, cb.literal(1000000.0));
+            Expression<Number> longDegrees = cb.quot(longMicro, cb.literal(1000000.0));
+
+// Converter para radianos (utiliza SQL function 'radians')
+            Expression<Double> latRad = cb.function("radians", Double.class, latDegrees);
+            Expression<Double> longRad = cb.function("radians", Double.class, longDegrees);
+
+// Conversão da posição do utilizador
+            double latUserRad = Math.toRadians(latitude);
+            double longUserRad = Math.toRadians(longitude);
+
+// Calcular distância usando a fórmula do Haversine (ou aproximação esférica)
+            Expression<Double> distanciaKm = cb.prod(cb.literal(6371.0),
+                    cb.function("acos", Double.class,
+                            cb.sum(
+                                    cb.prod(
+                                            cb.literal(Math.cos(latUserRad)),
+                                            cb.prod(
+                                                    cb.function("cos", Double.class, latRad),
+                                                    cb.function("cos", Double.class,
+                                                            cb.diff(longRad, cb.literal(longUserRad)))
+                                            )
+                                    ),
+                                    cb.prod(
+                                            cb.literal(Math.sin(latUserRad)),
+                                            cb.function("sin", Double.class, latRad)
+                                    )
+                            )
+                    )
+            );
+
+// Retornar condição de filtro
+            return cb.lessThanOrEqualTo(distanciaKm, raioKm);
+        };
+    }*/
+
 
 }

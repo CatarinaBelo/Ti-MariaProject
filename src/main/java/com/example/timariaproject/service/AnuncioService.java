@@ -40,6 +40,13 @@ public class AnuncioService {
         return anunciosPage.map(Anuncio::toDto);
     }
 
+    /*public Page<AnuncioDTO> buscarPorRaio(double latitude, double longitude, double raioKm, int page, int size) {
+        Specification<Anuncio> spec = AnuncioSpecification.withinRaioKm(latitude, longitude, raioKm);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
+        Page<Anuncio> anuncioPage = anuncioRepository.findAll(spec, pageable);
+        return anuncioPage.map(Anuncio::toDto);
+    }*/
+
     public String salvarAnuncio(AnuncioSaveDTO anuncioDTO) {
         anuncioRepository.save(anuncioDTO.toEntity());
         return "Anuncio Saved";
@@ -102,6 +109,7 @@ public class AnuncioService {
             List<Integer> subcategoriaIds,
             List<Integer> distritoIds,
             List<Integer> tagIds,
+            List<Integer> tipoanuncioIds,
             int page,
             int size
     ) {
@@ -109,7 +117,8 @@ public class AnuncioService {
                 .where(AnuncioSpecification.hasCategoriaIds(categoriaIds))
                 .and(AnuncioSpecification.hasSubcategoriaIds(subcategoriaIds))
                 .and(AnuncioSpecification.hasDistritoIds(distritoIds))
-                .and(AnuncioSpecification.hasTagIds(tagIds));
+                .and(AnuncioSpecification.hasTagIds(tagIds))
+                .and(AnuncioSpecification.hastipoanuncioIds(tipoanuncioIds));
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("datacriacao").descending());
         return anuncioRepository.findAll(spec, pageable).map(Anuncio::toDto);
@@ -280,5 +289,9 @@ public class AnuncioService {
                 .map(Anuncio::toDto)
                 .collect(Collectors.toList());
     }
+
+
+
+
 
 }

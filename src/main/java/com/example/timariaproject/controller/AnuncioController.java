@@ -8,6 +8,8 @@ import com.example.timariaproject.domain.Anuncio;
 import com.example.timariaproject.service.AnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,19 @@ public class AnuncioController {
         return ResponseEntity.ok(anuncios);
     }
 
+    /*@GetMapping("/search/raio")
+    public ResponseEntity<Page<AnuncioDTO>> buscarPorRaioPaginado(
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam double raioKm,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        Page<AnuncioDTO> anuncios = anuncioService.buscarPorRaio(latitude, longitude, raioKm, page, size);
+        return ResponseEntity.ok(anuncios);
+    }*/
+
     @PostMapping(path = "/add")
     public ResponseEntity<String> criarAnuncio(@RequestBody AnuncioSaveDTO anuncioDTO) {
 
@@ -47,11 +62,12 @@ public class AnuncioController {
             @RequestParam(required = false) List<Integer> subcategoriaIds,
             @RequestParam(required = false) List<Integer> distritoIds,
             @RequestParam(required = false) List<Integer> tagIds,
+            @RequestParam(required = false) List<Integer> tipoanuncioIds,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
         Page<AnuncioDTO> result = anuncioService.searchAnunciosByFilters(
-                categoriaIds, subcategoriaIds, distritoIds, tagIds, page, size
+                categoriaIds, subcategoriaIds, distritoIds, tagIds, tipoanuncioIds, page, size
         );
         return ResponseEntity.ok(result);
     }
@@ -131,4 +147,7 @@ public class AnuncioController {
         List<AnuncioDTO> anuncios = anuncioService.findByTipoAnuncioId(idTipoanuncio);
         return ResponseEntity.ok(anuncios);
     }
+
+
+
 }
